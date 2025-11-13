@@ -18,9 +18,9 @@ def main():
         data = generate_measurement()
         try:
             r = requests.post(BACKEND_URL, json=data)
-            print("Sent:", data, "| Backend response:", r.status_code)
+            print("Sent:", data, "| Backend response:", r.status_code, flush=True)
         except Exception as e:
-            print("Error:", e)
+            print("Error:", e, flush=True)
         time.sleep(1)
 
 if __name__ == "__main__":

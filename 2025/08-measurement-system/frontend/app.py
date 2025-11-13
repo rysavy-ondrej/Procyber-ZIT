@@ -17,6 +17,9 @@ def load_measurements():
 
 try:
     df = load_measurements()
+    column_order = ["id", "timestamp", "temperature", "humidity", "pressure"]
+    df = df[column_order]   # reorder columns
+
     st.table(df)
 except Exception as e:
     st.error(f"Nelze načíst data: {e}")
