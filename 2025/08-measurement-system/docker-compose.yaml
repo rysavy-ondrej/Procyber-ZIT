@@ -1,0 +1,45 @@
+version: "3.9"
+
+services:
+
+  db:
+    image: postgres:15
+    container_name: measurement_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: measurements
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./init_db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+
+  backend:
+    build: ./backend
+    container_name: measurement_backend
+    depends_on:
+      - db
+    restart: always
+    ports:
+      - "5000:5000"
+
+  ingestion:
+    build: ./ingestion
+    container_name: measurement_ingestion
+    depends_on:
+      - backend
+    restart: always
+
+  frontend:
+    build: ./frontend
+    container_name: measurement_frontend
+    depends_on:
+      - backend
+      - db
+    ports:
+      - "8501:8501"
+    restart: always
+
+volumes:
+  db_data:
